@@ -1,0 +1,401 @@
+<style>
+  .hz__faq-accordion-{{ section.id }} {
+    padding-top: {{section.settings.ptd}}px;
+    padding-bottom: {{section.settings.pbd}}px;
+    padding-left: {{section.settings.plrd}}px;
+    padding-right: {{section.settings.plrd}}px;
+    {% if section.settings.bg_img != blank %}
+      background: url('{{ section.settings.bg_img |img_url: '4000x'}}');
+    {% else %}
+      background: {{section.settings.bg_clr}};
+    {% endif %}
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-title {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 40px;
+    color: {{ section.settings.title_color }};
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-column {
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-item {
+    margin-bottom: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-question {
+    background-color: {{ section.settings.question_bg_color }};
+    color: {{ section.settings.question_text_color }};
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-question:hover {
+    background-color: {{ section.settings.question_hover_bg_color }};
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-item.active .hz__faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-answer {
+    background-color: {{ section.settings.answer_bg_color }};
+    color: {{ section.settings.answer_text_color }};
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-item.active .hz__faq-answer {
+    padding: 15px 20px;
+    max-height: 1000px;
+  }
+
+  .hz__faq-accordion-{{ section.id }} .hz__faq-answer-content {
+    line-height: 1.6;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .hz__faq-accordion-{{ section.id }} {
+      padding-top: {{section.settings.ptm}}px;
+      padding-bottom: {{section.settings.pbm}}px;
+      padding-left: {{section.settings.plrm}}px;
+      padding-right: {{section.settings.plrm}}px;
+    }
+
+    .hz__faq-accordion-{{ section.id }} .hz__faq-title {
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+    }
+
+    .hz__faq-accordion-{{ section.id }} .hz__faq-items {
+      flex-direction: column;
+    }
+
+    .hz__faq-accordion-{{ section.id }} .hz__faq-question {
+      font-size: 1rem;
+      padding: 12px 15px;
+    }
+  }
+</style>
+
+<section class="hz__faq-accordion-{{ section.id }}">
+  <div class="hz__faq-container">
+    {% if section.settings.title != blank %}
+      <h2 class="hz__faq-title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="hz__faq-items">
+      <div class="hz__faq-column hz__faq-column-left">
+        {% assign left_items = section.blocks | where: 'type', 'faq_left' %}
+        {% for block in left_items %}
+          <div class="hz__faq-item" id="faq-item-{{ block.id }}">
+            <div class="hz__faq-question" onclick="toggleFAQ('faq-item-{{ block.id }}')">
+              {{ block.settings.question }}
+              <span class="hz__faq-icon">
+                <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+            <div class="hz__faq-answer">
+              <div class="hz__faq-answer-content">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="hz__faq-column hz__faq-column-right">
+        {% assign right_items = section.blocks | where: 'type', 'faq_right' %}
+        {% for block in right_items %}
+          <div class="hz__faq-item" id="faq-item-{{ block.id }}">
+            <div class="hz__faq-question" onclick="toggleFAQ('faq-item-{{ block.id }}')">
+              {{ block.settings.question }}
+              <span class="hz__faq-icon">
+                <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+            <div class="hz__faq-answer">
+              <div class="hz__faq-answer-content">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleFAQ(id) {
+    const item = document.getElementById(id);
+    if (item) {
+      item.classList.toggle('active');
+
+      // Close other FAQs if configured to do so
+      {% if section.settings.close_others %}
+        const allItems = document.querySelectorAll('.hz__faq-item');
+        allItems.forEach(otherItem => {
+          if (otherItem.id !== id && otherItem.classList.contains('active')) {
+            otherItem.classList.remove('active');
+          }
+        });
+      {% endif %}
+    }
+  }
+
+  // Open the first FAQ item by default if configured
+  document.addEventListener('DOMContentLoaded', function() {
+    {% if section.settings.open_first_item %}
+      const firstItem = document.querySelector('.hz__faq-item');
+      if (firstItem) {
+        firstItem.classList.add('active');
+      }
+    {% endif %}
+  });
+</script>
+
+{% schema %}
+{
+  "name": "FAQ Accordion",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Accordion Styling"
+    },
+    {
+      "type": "color",
+      "id": "question_bg_color",
+      "label": "Question Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "question_text_color",
+      "label": "Question Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "question_hover_bg_color",
+      "label": "Question Hover Background Color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "answer_bg_color",
+      "label": "Answer Background Color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "answer_text_color",
+      "label": "Answer Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_item",
+      "label": "Open first item by default",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "close_others",
+      "label": "Close other items when one is opened",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Background"
+    },
+    {
+      "type": "image_picker",
+      "label": "Background Image",
+      "id": "bg_img"
+    },
+    {
+      "type": "color_background",
+      "label": "Background Color",
+      "id": "bg_clr",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Padding Controls - Desktop"
+    },
+    {
+      "type": "range",
+      "label": "Padding Top",
+      "id": "ptd",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "label": "Padding Bottom",
+      "id": "pbd",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "label": "Padding Left & Right",
+      "id": "plrd",
+      "unit": "px",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Padding Controls - Mobile"
+    },
+    {
+      "type": "range",
+      "label": "Padding Top",
+      "id": "ptm",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "label": "Padding Bottom",
+      "id": "pbm",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "label": "Padding Left & Right",
+      "id": "plrm",
+      "unit": "px",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 15
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_left",
+      "name": "FAQ Left Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Will I actually feel it?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Most feel a quick, energizing, happy euphoria followed by a sense of relaxation. Unlike traditional edibles, our THC drinks utilize micronized extracts that are felt within 5 minutes and last up to 1.5 hours.</p>"
+        }
+      ]
+    },
+    {
+      "type": "faq_right",
+      "name": "FAQ Right Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How are these legal?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Yes, we utilized federally legal hemp and lion's mane mushroom to create something special. The Delta-9 THC in our drinks is naturally-derived from hemp (Cannabis sativa L.) and is no more than 0.3% of the product's net weight, ensuring full compliance with the 2018 Farm Bill.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "HZ FAQ Accordion",
+      "category": "text",
+      "blocks": [
+        {
+          "type": "faq_left"
+        },
+        {
+          "type": "faq_right"
+        },
+        {
+          "type": "faq_left"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
